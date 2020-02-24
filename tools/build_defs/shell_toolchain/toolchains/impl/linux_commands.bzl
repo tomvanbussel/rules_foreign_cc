@@ -67,7 +67,7 @@ def copy_dir_contents_to_dir(source, target):
 
 def symlink_contents_to_dir(source, target):
     text = """local target="$2"
-mkdir -p $target
+# mkdir -p $target
 if [[ -f $1 ]]; then
   ##symlink_to_dir## $1 $target
   return 0
@@ -75,8 +75,9 @@ fi
 
 if [[ -d $1 || -L $1 ]]; then
   local children=$(find -H $1 -maxdepth 1 -mindepth 1)
+  mkdir -p $target
   for child in $children; do
-    ##symlink_to_dir## $child $target
+    ##symlink_contents_to_dir## $child $target/${child##*/}
   done
 fi
 """
@@ -84,7 +85,7 @@ fi
 
 def symlink_to_dir(source, target):
     text = """local target="$2"
-mkdir -p ${target}
+# mkdir -p ${target}
 
 if [[ -d $1 ]]; then
   ln -s -t ${target} $1
