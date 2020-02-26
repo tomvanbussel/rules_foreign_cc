@@ -77,7 +77,11 @@ if [[ -d $1 || -L $1 ]]; then
   local children=$(find -H $1 -maxdepth 1 -mindepth 1)
   mkdir -p $target
   for child in $children; do
-    ##symlink_contents_to_dir## $child $target/${child##*/}
+    if [[ -f $child ]]; then
+      ##symlink_contents_to_dir## $child $target
+    elif [[ -d $child ]]; then
+      ##symlink_contents_to_dir## $child $target/${child##*/}
+    fi
   done
 fi
 """
